@@ -13,6 +13,7 @@ const GITHUB_URL = "https://github.com/openrouterteam/sign-in-with-openrouter";
 
 type SkillTab = "oauth" | "sdk";
 
+// Canonical source: https://github.com/OpenRouterTeam/skills/blob/main/skills/openrouter-oauth/SKILL.md
 const SKILL_OAUTH = `# Sign In with OpenRouter — OAuth API
 
 Implement OpenRouter OAuth (PKCE) with a beautiful sign-in button.
@@ -267,6 +268,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 });
 \`\`\``;
 
+// Condensed from: https://github.com/OpenRouterTeam/skills/blob/main/skills/openrouter-typescript-sdk/SKILL.md
 const SKILL_SDK = `# Sign In with OpenRouter — TypeScript SDK
 
 Use the \`@openrouter/sdk\` for OAuth and completions with full type safety, plus a beautiful sign-in button.

@@ -1,59 +1,36 @@
 # Sign In with OpenRouter
 
-Beautiful, drop-in React components for "Sign In with OpenRouter" using PKCE OAuth. No client registration, no backend, no secrets.
+Beautiful, framework-agnostic sign-in buttons for [OpenRouter OAuth](https://openrouter.ai/docs/guides/overview/auth/oauth). No client registration, no backend, no secrets.
 
-## Install
+**[Live Demo & Button Playground](https://openrouterteam.github.io/sign-in-with-openrouter/)**
 
-```bash
-npm install sign-in-with-openrouter
+## Get the Skill
+
+The copy-pasteable OAuth skill (auth module + SignInButton component) lives in the [OpenRouter Skills](https://github.com/OpenRouterTeam/skills) repo:
+
+```
+skills/openrouter-oauth/SKILL.md
 ```
 
-Requires React 18+ and [Tailwind CSS](https://tailwindcss.com/) for styling.
+Install it in your AI coding agent:
 
-## Quick Start
+| Agent | Command |
+|-------|---------|
+| Claude Code | `/plugin marketplace add OpenRouterTeam/skills` → `/plugin install openrouter@openrouter` |
+| Cursor | Settings > Rules > Add Rule > Remote Rule: `OpenRouterTeam/skills` |
+| Skills CLI | `npx skills add OpenRouterTeam/skills` |
 
-```tsx
-import { SignInButton, OpenRouterAuthProvider, useOpenRouterAuth } from "sign-in-with-openrouter";
+Or just copy `SKILL.md` directly into your project.
 
-function App() {
-  return (
-    <OpenRouterAuthProvider>
-      <MyApp />
-    </OpenRouterAuthProvider>
-  );
-}
+## What's Included
 
-function MyApp() {
-  const { isAuthenticated, apiKey, signOut } = useOpenRouterAuth();
+The skill gives you two files to drop into any project:
 
-  if (isAuthenticated) {
-    return (
-      <div>
-        <p>Ready to use OpenRouter! Key: {apiKey?.slice(0, 12)}...</p>
-        <button onClick={signOut}>Sign out</button>
-      </div>
-    );
-  }
+1. **`lib/openrouter-auth.ts`** — Framework-agnostic PKCE OAuth flow using plain `fetch`. Handles verifier generation, redirect, code exchange, key storage in `localStorage`, and cross-tab sync.
 
-  // Automatically wired — just drop it in and it works
-  return <SignInButton />;
-}
-```
+2. **`components/sign-in-button.tsx`** — Styled button with the OpenRouter logo, 5 variants, 4 sizes, and dark mode support.
 
-That's it. The `<SignInButton />` automatically connects to the `OpenRouterAuthProvider` context — no `onClick` wiring needed.
-
-## Features
-
-- **Zero config** — No client ID, no client secret, no OAuth app registration
-- **No backend required** — PKCE OAuth runs entirely in the browser
-- **Auto-wired button** — `<SignInButton />` just works inside `<OpenRouterAuthProvider>`
-- **Multi-tab sync** — Sign in/out in one tab and all tabs update instantly
-- **SSR safe** — Works in SSR environments (Next.js, Remix) without crashing
-- **React 18 & 19** — Handles StrictMode double-mount correctly
-- **TypeScript** — Full type exports including `OpenRouterAuthContext` and `SignInButtonProps`
-- **5 button variants** — `default`, `minimal`, `branded`, `icon`, `cta`
-- **4 sizes** — `sm`, `default`, `lg`, `xl`
-- **Customizable** — Custom labels, logo position, loading states
+Works with React, Vue, Svelte, vanilla JS, or any framework.
 
 ## Button Variants
 
@@ -63,136 +40,37 @@ That's it. The `<SignInButton />` automatically connects to the `OpenRouterAuthP
 | `minimal` | Text-only, underline on hover |
 | `branded` | Dark background, white text |
 | `icon` | Logo only, square |
-| `cta` | Large landing page button with scale effect |
-
-```tsx
-<SignInButton variant="default" />
-<SignInButton variant="minimal" />
-<SignInButton variant="branded" />
-<SignInButton variant="icon" />
-<SignInButton variant="cta" size="xl" />
-```
-
-## Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `default \| minimal \| branded \| icon \| cta` | `default` | Button style |
-| `size` | `sm \| default \| lg \| xl` | `default` | Button size |
-| `label` | `string` | `"Sign in with OpenRouter"` | Button text |
-| `showLogo` | `boolean` | `true` | Show OpenRouter logo |
-| `logoPosition` | `left \| right` | `left` | Logo position |
-| `loading` | `boolean` | auto | Show loading spinner (auto-detected from auth state) |
-| `onClick` | `function` | auto | Click handler (auto-wired to `signIn()` when inside provider) |
-
-## Auth Hook
-
-```tsx
-const {
-  apiKey,          // string | null — the OpenRouter API key
-  isAuthenticated, // boolean
-  isLoading,       // boolean — true during OAuth callback exchange
-  signIn,          // (callbackUrl?: string) => Promise<void>
-  signOut,         // () => void
-  error,           // string | null
-} = useOpenRouterAuth();
-```
-
-## Using the API Key
-
-After sign-in, use the key with OpenRouter's OpenAI-compatible API:
-
-```tsx
-const { apiKey } = useOpenRouterAuth();
-
-const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${apiKey}`,
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    model: "openai/gpt-4o-mini",
-    messages: [{ role: "user", content: "Hello!" }],
-  }),
-});
-```
-
-Or with the OpenAI SDK:
-
-```tsx
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: apiKey,
-  dangerouslyAllowBrowser: true,
-});
-```
-
-## Standalone Auth Functions
-
-If you need lower-level control or aren't using React:
-
-```ts
-import {
-  initiateOAuth,
-  handleOAuthCallback,
-  getApiKey,
-  setApiKey,
-  clearApiKey,
-  onAuthChange,
-} from "sign-in-with-openrouter";
-
-// Start OAuth flow
-await initiateOAuth("https://myapp.com/callback");
-
-// Handle the callback (exchange code for key)
-const code = new URLSearchParams(window.location.search).get("code");
-if (code) await handleOAuthCallback(code);
-
-// Read/manage the stored key
-const key = getApiKey();
-clearApiKey();
-
-// Listen for auth changes (including from other tabs)
-const unsubscribe = onAuthChange(() => {
-  console.log("Auth changed:", getApiKey());
-});
-```
-
-## Server-Side Key Exchange
-
-For apps with a backend (API routes, server actions):
-
-```ts
-import { exchangeCodeForKey } from "sign-in-with-openrouter";
-
-// In your API route
-const key = await exchangeCodeForKey(code, codeVerifier);
-```
+| `cta` | Landing page button with scale effect |
 
 ## How It Works
 
-OpenRouter supports PKCE OAuth without client registration:
+1. User clicks the sign-in button
+2. Browser redirects to `https://openrouter.ai/auth` with a PKCE code challenge
+3. User authorizes on OpenRouter
+4. OpenRouter redirects back with `?code=`
+5. App exchanges the code for an API key via `POST /api/v1/auth/keys`
+6. Key is stored in `localStorage` — ready to use with any OpenRouter model
 
-1. Generate a random `code_verifier` and compute its S256 `code_challenge`
-2. Redirect to `https://openrouter.ai/auth` with the challenge
-3. User authenticates on OpenRouter and is redirected back with `?code=...`
-4. Exchange the code + verifier for an API key via `POST /api/v1/auth/keys`
-5. Key is stored in `localStorage` and available via `getApiKey()` or `useOpenRouterAuth()`
+## This Repo
 
-The `?code=` parameter is only processed when a matching `code_verifier` exists in `sessionStorage`, preventing collisions with other query parameters.
+This repo contains the **reference implementation** and **demo web app**:
+
+- `src/lib/` — Auth module with full error handling, SSR safety, cross-tab sync
+- `src/components/` — SignInButton with CVA variants, OpenRouterLogo SVG
+- `src/hooks/` — React context provider (`OpenRouterAuthProvider`) and `useOpenRouterAuth` hook
+- `src/demo/` — Interactive demo deployed to [GitHub Pages](https://openrouterteam.github.io/sign-in-with-openrouter/)
+
+```bash
+npm install
+npm run dev       # Demo at localhost:5173
+npm run build:demo
+```
 
 ## Security Notes
 
 - API keys are stored in `localStorage` — any JavaScript on the page can access them. This is a known tradeoff for backend-less apps.
-- The PKCE code verifier is stored in `sessionStorage` (per-tab, cleared on tab close) for security.
+- The PKCE code verifier is stored in `sessionStorage` (per-tab, cleared on tab close).
 - Consider Content Security Policy and XSS protections for production apps.
-
-## Claude Code Skill
-
-This repo includes a Claude Code skill at `.claude/skills/openrouter-oauth/SKILL.md` with copy-paste implementation templates for React+Vite, Next.js App Router, and plain HTML.
 
 ## License
 

@@ -2,7 +2,7 @@
   "name": "sign-in-with-openrouter",
   "version": "0.1.0",
   "type": "module",
-  "description": "Beautiful React sign-in button and PKCE OAuth for OpenRouter. No client registration needed.",
+  "description": "Beautiful, framework-agnostic sign-in buttons and PKCE OAuth for OpenRouter. No client registration needed.",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
