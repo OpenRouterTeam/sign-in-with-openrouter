@@ -196,38 +196,27 @@ body {
   opacity: 0.5;
 }
 
-/* Skill tabs */
-.skill-tabs {
+/* Skill header */
+.skill-header {
   display: flex;
-  gap: 0;
-  margin-bottom: -1px;
-  position: relative;
-  z-index: 1;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.skill-tab {
-  padding: 8px 20px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-bottom: 2px solid transparent;
-  color: var(--text-muted);
+.skill-header h2 {
+  margin-bottom: 0;
+}
+
+.skill-github-link {
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  border-radius: 6px 6px 0 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
 
-.skill-tab:hover {
+.skill-github-link:hover {
   color: var(--text);
-}
-
-.skill-tab--active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-  background: var(--bg-card);
-  border-color: var(--border);
-  border-bottom-color: var(--accent);
 }
 
 /* Skill viewer */
