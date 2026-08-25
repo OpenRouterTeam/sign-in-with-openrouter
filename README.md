@@ -28,7 +28,7 @@ The skill gives you two files to drop into any project:
 
 1. **`lib/openrouter-auth.ts`** — Framework-agnostic PKCE OAuth flow using plain `fetch`. Handles verifier generation, redirect, code exchange, key storage in `localStorage`, and cross-tab sync.
 
-2. **`components/sign-in-button.tsx`** — Styled button with the OpenRouter logo, 5 variants, 4 sizes, and dark mode support.
+2. **`components/sign-in-button.tsx`** — Styled button with the OpenRouter logo, 7 variants, 4 sizes, and dark mode support.
 
 Works with React, Vue, Svelte, vanilla JS, or any framework.
 
@@ -41,6 +41,8 @@ Works with React, Vue, Svelte, vanilla JS, or any framework.
 | `branded` | Dark background, white text |
 | `icon` | Logo only, square |
 | `cta` | Landing page button with scale effect |
+| `brand-light` | Light button with the purple (`#7624F4`) brand logo |
+| `brand-dark` | Dark button with the lime (`#C8FF00`) brand logo |
 
 ## Logo Colors
 
