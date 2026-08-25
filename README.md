@@ -42,6 +42,18 @@ Works with React, Vue, Svelte, vanilla JS, or any framework.
 | `icon` | Logo only, square |
 | `cta` | Landing page button with scale effect |
 
+## Logo Colors
+
+The logo defaults to `currentColor` (inherits the button's text color). To use the official brand colors, pass `logoMode` to `SignInButton` (or `mode` to `OpenRouterLogo`):
+
+| Mode | Fill | Use on |
+|------|------|--------|
+| `current` (default) | Inherits text color | Anywhere |
+| `light` | `#7624F4` (purple) | Light backgrounds |
+| `dark` | `#C8FF00` (lime) | Dark backgrounds |
+
+Standalone assets: `public/openrouter-logo.svg` (currentColor), `public/openrouter-logo-light.svg`, `public/openrouter-logo-dark.svg`.
+
 ## How It Works
 
 1. User clicks the sign-in button
