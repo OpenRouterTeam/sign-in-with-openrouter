@@ -29,6 +29,10 @@ const signInButtonVariants = cva(
           "rounded-lg border border-neutral-300 bg-white text-neutral-900 shadow-sm hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 aspect-square",
         cta:
           "rounded-xl bg-neutral-900 text-white shadow-lg hover:bg-neutral-800 hover:scale-[1.02] active:scale-[0.98] dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100",
+        "brand-light":
+          "rounded-lg border border-neutral-300 bg-white text-neutral-900 shadow-sm hover:bg-neutral-50 hover:border-neutral-400",
+        "brand-dark":
+          "rounded-lg border border-neutral-800 bg-neutral-950 text-white shadow-sm hover:bg-neutral-900",
       },
       size: {
         sm: "h-8 px-3 text-xs",
@@ -95,7 +99,7 @@ const SignInButton = React.forwardRef<HTMLButtonElement, SignInButtonProps>(
       label,
       showLogo = true,
       logoPosition = "left",
-      logoMode = "current",
+      logoMode,
       loading: loadingProp,
       disabled,
       onClick,
@@ -115,6 +119,14 @@ const SignInButton = React.forwardRef<HTMLButtonElement, SignInButtonProps>(
       }
     };
 
+    const resolvedLogoMode: OpenRouterLogoMode =
+      logoMode ??
+      (variant === "brand-light"
+        ? "light"
+        : variant === "brand-dark"
+          ? "dark"
+          : "current");
+
     const isIconOnly = variant === "icon";
     const buttonLabel = label ?? (isIconOnly ? undefined : "Sign in with OpenRouter");
 
@@ -122,7 +134,7 @@ const SignInButton = React.forwardRef<HTMLButtonElement, SignInButtonProps>(
       size === "sm" ? "size-3.5" : size === "xl" ? "size-5" : "size-4";
 
     const logoEl = showLogo ? (
-      <OpenRouterLogo className={logoSize} mode={logoMode} />
+      <OpenRouterLogo className={logoSize} mode={resolvedLogoMode} />
     ) : null;
 
     const spinnerSize =

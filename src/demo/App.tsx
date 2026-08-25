@@ -7,7 +7,15 @@ import {
 } from "@/hooks/use-openrouter-auth";
 import { CodeBlock } from "./CodeBlock";
 
-const VARIANTS = ["default", "minimal", "branded", "icon", "cta"] as const;
+const VARIANTS = [
+  "default",
+  "minimal",
+  "branded",
+  "icon",
+  "cta",
+  "brand-light",
+  "brand-dark",
+] as const;
 
 const OAUTH_DOCS_URL = "https://openrouter.ai/docs/guides/overview/auth/oauth";
 const GITHUB_URL = "https://github.com/openrouterteam/sign-in-with-openrouter";
