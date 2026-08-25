@@ -2,7 +2,7 @@ import * as React from "react";
 import { useContext } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { OpenRouterLogo } from "./openrouter-logo";
+import { OpenRouterLogo, type OpenRouterLogoMode } from "./openrouter-logo";
 
 // Re-use the auth context to auto-wire signIn — import the context directly
 // to avoid a hard requirement on the provider (useOpenRouterAuth throws if missing)
@@ -53,6 +53,8 @@ export interface SignInButtonProps
   showLogo?: boolean;
   /** Logo position relative to text */
   logoPosition?: "left" | "right";
+  /** Logo color: "current" inherits text color; "light"/"dark" use the brand colors for that background */
+  logoMode?: OpenRouterLogoMode;
   /** Show loading spinner */
   loading?: boolean;
   /** onClick handler — defaults to initiating OpenRouter OAuth when inside OpenRouterAuthProvider */
@@ -93,6 +95,7 @@ const SignInButton = React.forwardRef<HTMLButtonElement, SignInButtonProps>(
       label,
       showLogo = true,
       logoPosition = "left",
+      logoMode = "current",
       loading: loadingProp,
       disabled,
       onClick,
@@ -119,7 +122,7 @@ const SignInButton = React.forwardRef<HTMLButtonElement, SignInButtonProps>(
       size === "sm" ? "size-3.5" : size === "xl" ? "size-5" : "size-4";
 
     const logoEl = showLogo ? (
-      <OpenRouterLogo className={logoSize} />
+      <OpenRouterLogo className={logoSize} mode={logoMode} />
     ) : null;
 
     const spinnerSize =
